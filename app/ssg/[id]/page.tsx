@@ -1,4 +1,4 @@
-import { Catalog, catalogs } from "@/app/lib/data/mock-data";
+import { Catalog, catalogs } from "@/lib/data/mock-data";
 
 // /app/ssg/page.tsx
 async function getCatalogData(catalogId: string): Promise<Catalog | undefined> {

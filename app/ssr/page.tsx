@@ -1,5 +1,3 @@
-// app/ssr/page.tsx
-
 export const dynamic = 'force-dynamic'; // Ensures SSR
 
 export default async function SSRPage() {

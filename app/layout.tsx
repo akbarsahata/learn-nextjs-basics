@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { BackToHomeButton } from "./lib/ui/back-to-home-button";
-import ProgressProvider from "./lib/ui/progress-provider";
+import { BackToHomeButton } from "@/lib/ui/back-to-home-button";
+import ProgressProvider from "@/lib/ui/progress-provider";
 import "./globals.css";
 
 const geistSans = Geist({

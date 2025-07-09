@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { catalogs } from "../lib/data/mock-data";
+import { catalogs } from "@/lib/data/mock-data";
 
 export default function SSGPage() {
   return (
