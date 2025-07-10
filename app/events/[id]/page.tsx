@@ -1,17 +1,19 @@
-import React from "react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import { db } from "@/lib/data/db";
 import { eventsRepository } from "@/lib/data/repositories";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface EventDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function EventDetailPage({ params }: EventDetailPageProps) {
-  const event = await eventsRepository.getById(db, params.id);
+export default async function EventDetailPage({
+  params,
+}: EventDetailPageProps) {
+  const { id } = await params;
+  const event = await eventsRepository.getById(db, id);
 
   if (!event) {
     notFound();
@@ -35,7 +37,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             {event.name}
           </h1>
-          
+
           <div className="mb-6">
             <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
               {new Date(event.date).toLocaleDateString("en-US", {
@@ -48,7 +50,9 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           </div>
 
           <div className="prose max-w-none">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Description
+            </h3>
             <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
               {event.description}
             </p>
