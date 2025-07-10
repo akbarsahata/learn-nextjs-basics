@@ -3,8 +3,9 @@ import { eventsRepository } from "@/lib/data/repositories";
 
 export async function GET(
   request: Request,
-  { params: { id } }: { params: { id: string } }
+  params: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params.params;
   const event = await eventsRepository.getById(db, id);
   return new Response(JSON.stringify({ data: event }), {
     headers: { "Content-Type": "application/json" },
@@ -13,8 +14,9 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params: { id } }: { params: { id: string } }
+  params: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params.params;
   const data = await request.json();
 
   const updateData = {
@@ -34,8 +36,9 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params: { id } }: { params: { id: string } }
+  params: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params.params;
   if (!id) {
     return new Response("ID is required for deletion", { status: 400 });
   }
