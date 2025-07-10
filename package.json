@@ -10,10 +10,15 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
+    "@types/pg": "^8.15.4",
     "date-fns": "^4.1.0",
+    "drizzle-orm": "^0.44.2",
+    "drizzle-zod": "^0.8.2",
     "next": "15.3.5",
+    "pg": "^8.16.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
