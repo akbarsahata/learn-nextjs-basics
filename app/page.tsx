@@ -1,3 +1,4 @@
+import { Separator } from "@/lib/ui/common";
 import Link from "next/link";
 
 export default function Home() {
@@ -27,6 +28,13 @@ export default function Home() {
           className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-gray-50 hover:bg-gray-100 transition"
         >
           Client Rendered
+        </Link>
+        <Separator />
+        <Link
+          href="/forms"
+          className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-gray-50 hover:bg-gray-100 transition"
+        >
+          Forms
         </Link>
       </div>
     </div>
