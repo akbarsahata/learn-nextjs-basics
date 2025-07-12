@@ -2,6 +2,7 @@
 
 import { Loader2Icon } from "lucide-react";
 import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { actionWithSimulatedDelay } from "./actions";
 
 export const initialState = {
@@ -38,5 +39,20 @@ export function FormWithActionState() {
         </button>
       </form>
     </div>
+  );
+}
+
+export function PendingSubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className="bg-black text-white font-semibold rounded-sm p-2 hover:bg-gray-800 disabled:opacity-50 transition-colors flex gap-1 items-center justify-center"
+      disabled={pending}
+    >
+      {pending && <Loader2Icon className="animate-spin" />}
+      <span>Submit</span>
+    </button>
   );
 }

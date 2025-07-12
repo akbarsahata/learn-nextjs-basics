@@ -3,6 +3,8 @@
 export async function handleFormSubmission(formData: FormData) {
   const exampleInput = formData.get("example");
 
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
   // Simulate processing the form data
   console.log("Form submitted with input:", exampleInput);
 }

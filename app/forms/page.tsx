@@ -1,6 +1,6 @@
 import { Separator } from "@/lib/ui/common";
 import { actionWithAdditionalArgument, handleFormSubmission } from "./actions";
-import { FormWithActionState } from "./csr-forms";
+import { FormWithActionState, PendingSubmitButton } from "./csr-forms";
 
 export default function Page() {
   return (
@@ -19,6 +19,8 @@ export default function Page() {
         <ActionWithAdditionalArgumentForm />
         <Separator />
         <FormWithActionState />
+        <Separator />
+        <FormWithPendingSubmitButton />
       </div>
     </div>
   );
@@ -75,6 +77,24 @@ async function ActionWithAdditionalArgumentForm() {
         >
           Submit with Args
         </button>
+      </form>
+    </div>
+  );
+}
+
+async function FormWithPendingSubmitButton() {
+  return (
+    <div className="mt-4">
+      <h2 className="text-gray-500 mb-4 text-xl">Form with Pending Submit Button</h2>
+      <form action={handleFormSubmission} className="flex flex-col gap-4">
+        <input
+          type="text"
+          name="example"
+          placeholder="See console for output"
+          required
+          className="border-2 rounded-sm p-1 focus:outline-none focus:border-blue-500"
+        />
+        <PendingSubmitButton />
       </form>
     </div>
   );
