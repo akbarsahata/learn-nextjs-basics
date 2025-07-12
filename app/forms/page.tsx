@@ -1,5 +1,6 @@
 import { Separator } from "@/lib/ui/common";
 import { actionWithAdditionalArgument, handleFormSubmission } from "./actions";
+import { FormWithActionState } from "./csr-forms";
 
 export default function Page() {
   return (
@@ -8,10 +9,16 @@ export default function Page() {
         <h1 className="text-2xl font-bold text-gray-600">
           Multiple Form Examples
         </h1>
+        <p className="text-gray-500 mb-4">
+          This page demonstrates various form implementations in Next.js. See
+          source code for details.
+        </p>
         <Separator />
         <ServerRenderedForm />
         <Separator />
         <ActionWithAdditionalArgumentForm />
+        <Separator />
+        <FormWithActionState />
       </div>
     </div>
   );
