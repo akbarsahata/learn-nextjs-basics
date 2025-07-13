@@ -1,6 +1,6 @@
 import { Separator } from "@/lib/ui/common";
 import { actionWithAdditionalArgument, handleFormSubmission } from "./actions";
-import { FormWithActionState, PendingSubmitButton } from "./csr-forms";
+import { FormWithActionState, FormWithUploadFile, PendingSubmitButton } from "./csr-forms";
 
 export default function Page() {
   return (
@@ -21,6 +21,8 @@ export default function Page() {
         <FormWithActionState />
         <Separator />
         <FormWithPendingSubmitButton />
+        <Separator />
+        <FormWithUploadFile />
       </div>
     </div>
   );

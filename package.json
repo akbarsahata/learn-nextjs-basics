@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
+    "@supabase/supabase-js": "^2.50.5",
     "@types/pg": "^8.15.4",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.44.2",

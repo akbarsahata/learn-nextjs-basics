@@ -1,9 +1,10 @@
 "use client";
 
 import { Loader2Icon } from "lucide-react";
+import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { actionWithSimulatedDelay } from "./actions";
+import { actionWithFileUpload, actionWithSimulatedDelay } from "./actions";
 
 export const initialState = {
   example: "",
@@ -54,5 +55,50 @@ export function PendingSubmitButton() {
       {pending && <Loader2Icon className="animate-spin" />}
       <span>Submit</span>
     </button>
+  );
+}
+
+export function FormWithUploadFile() {
+  const initialState = {
+    message: {
+      error: "",
+      success: "",
+    },
+    url: undefined,
+  };
+
+  const [nextState, setActionWithFileUpload] = useActionState(
+    actionWithFileUpload,
+    initialState
+  );
+  return (
+    <form action={setActionWithFileUpload} className="flex flex-col gap-4">
+      <input
+        type="file"
+        name="file"
+        accept="image/*"
+        required
+        className="border-2 rounded-sm p-1 focus:outline-none focus:border-blue-500"
+      />
+      {nextState.message.error && (
+        <p className="text-red-500">{nextState.message.error}</p>
+      )}
+      {nextState.message.success && (
+        <div>
+          <p className="text-green-500">{nextState.message.success}</p>
+          {nextState.url && (
+            <Link
+              href={nextState.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              View Uploaded File
+            </Link>
+          )}
+        </div>
+      )}
+      <PendingSubmitButton />
+    </form>
   );
 }
