@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { eventsTable } from "./tables";
-import { Db, EventInsert, EventUpdate } from "./types";
+import { eventsTable, galleriesTable } from "./tables";
+import { Db, EventInsert, EventUpdate, GalleryInsert } from "./types";
 
 export const eventsRepository = {
   async getAll(db: Db) {
@@ -23,5 +23,32 @@ export const eventsRepository = {
   },
   async delete(db: Db, id: string) {
     return db.delete(eventsTable).where(eq(eventsTable.id, id)).returning();
+  },
+};
+
+export const galleriesRepository = {
+  async getAll(db: Db) {
+    return db.query.galleriesTable.findMany();
+  },
+  async getById(db: Db, id: string) {
+    return db.query.galleriesTable.findFirst({
+      where: (galleries, { eq }) => eq(galleries.id, id),
+    });
+  },
+  async create(db: Db, data: GalleryInsert) {
+    return db.insert(galleriesTable).values(data).returning();
+  },
+  async update(db: Db, id: string, data: Partial<GalleryInsert>) {
+    return db
+      .update(galleriesTable)
+      .set(data)
+      .where(eq(galleriesTable.id, id))
+      .returning();
+  },
+  async delete(db: Db, id: string) {
+    return db
+      .delete(galleriesTable)
+      .where(eq(galleriesTable.id, id))
+      .returning();
   },
 };

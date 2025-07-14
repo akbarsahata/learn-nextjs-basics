@@ -22,6 +22,13 @@ export default function Home() {
         >
           Forms
         </Link>
+        <Separator />
+        <Link
+          href="/gallery"
+          className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-gray-50 hover:bg-gray-100 transition"
+        >
+          Gallery
+        </Link>
       </div>
     </div>
   );
