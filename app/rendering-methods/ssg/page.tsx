@@ -13,7 +13,7 @@ export default function SSGPage() {
             <h2 className="text-xl font-semibold">{catalog.name}</h2>
             <p className="text-gray-700">{catalog.description}</p>
             <Link
-              href={`/ssg/${catalog.id}`}
+              href={`/rendering-methods/ssg/${catalog.id}`}
               className="text-blue-500 hover:underline"
             >
               View Details
