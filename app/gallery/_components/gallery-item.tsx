@@ -1,8 +1,10 @@
 "use client";
 
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import Image from "next/image";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 // Placeholder component for loading/fallback
 function LoadingOrFallback() {
@@ -35,10 +37,15 @@ interface GalleryItemProps {
 
 export default function GalleryItem(props: GalleryItemProps) {
   const { pictureUrl, description, updatedDate } = props;
+
+  const [openDialog, setOpenDialog] = useState(false);
   return (
     <div className="border-2 border-gray-300 rounded-lg">
       <div className="p-4 space-y-3">
-        <div className="w-full h-80 bg-gray-200 rounded-sm flex items-center justify-center overflow-hidden">
+        <div
+          onClick={() => setOpenDialog(true)}
+          className="w-full h-80 bg-gray-200 rounded-sm flex items-center justify-center overflow-hidden hover:opacity-85 transition-opacity duration-300 hover:cursor-pointer"
+        >
           <Suspense fallback={<LoadingOrFallback />}>
             <Image
               src={pictureUrl}
@@ -56,6 +63,44 @@ export default function GalleryItem(props: GalleryItemProps) {
           <p>{format(updatedDate, "EEEE, d MMMM yyyy")}</p>
         </div>
       </div>
+      <DialogDemo
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        pictureUrl={pictureUrl}
+        description={description}
+      />
     </div>
+  );
+}
+
+interface DialogDemoProps {
+  open: boolean;
+  onClose: () => void;
+  pictureUrl: string;
+  description: string;
+}
+
+export function DialogDemo(props: DialogDemoProps) {
+  const { open, onClose, pictureUrl, description } = props;
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <form>
+        <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">
+          <DialogHeader>
+            <DialogTitle>{description}</DialogTitle>
+          </DialogHeader>
+          <Suspense fallback={<LoadingOrFallback />}>
+            <Image
+              src={pictureUrl}
+              alt={description}
+              height={800}
+              width={800}
+              unoptimized
+              loading="lazy"
+            />
+          </Suspense>
+        </DialogContent>
+      </form>
+    </Dialog>
   );
 }
