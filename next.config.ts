@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "50mb",
     }
   },
+  images: {
+    remotePatterns: [new URL("http://localhost:3000/**"), new URL("https://ywrqxzytqjkrgnzikkwr.supabase.co/storage/**")],
+  }
 };
 
 export default nextConfig;
