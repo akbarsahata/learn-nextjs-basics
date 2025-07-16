@@ -26,7 +26,7 @@ export async function uploadPictureAction(
 
   const fileName = generateFileName(file);
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("learn-nextjs-basics")
     .upload(`uploads/${fileName}`, file);
 
@@ -39,18 +39,11 @@ export async function uploadPictureAction(
     };
   }
 
-  console.log("File uploaded successfully:", data);
-
   const { data: urlData } = supabase.storage
     .from("learn-nextjs-basics")
     .getPublicUrl(`uploads/${fileName}`);
 
   await galleriesRepository.create(db, {
-    imageUrl: urlData.publicUrl,
-    description,
-  });
-
-  console.log("Picture saved to database:", {
     imageUrl: urlData.publicUrl,
     description,
   });
@@ -69,15 +62,12 @@ export async function deletePictureAction(
   prevState: { success: boolean; message: string },
   data: FormData
 ): Promise<{ success: boolean; message: string }> {
-  console.log("Delete action triggered with data:", data);
   const pictureUrl = data.get("pictureUrl") as string;
   if (!pictureUrl) {
     return { success: false, message: "Picture URL is required." };
   }
 
   const [folder, fileName] = pictureUrl.split("/").slice(-2);
-
-  console.log("Deleting picture with URL:", pictureUrl);
 
   const { error } = await supabase.storage
     .from("learn-nextjs-basics")
