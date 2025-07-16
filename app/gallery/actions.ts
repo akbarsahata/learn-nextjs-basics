@@ -5,9 +5,8 @@ import { galleriesRepository } from "@/lib/data/repositories";
 import { supabase } from "@/lib/supabase";
 import { generateFileName } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { initialState } from "../forms/csr-forms";
 import { GalleryUploadActionState } from "./_components/upload-picture-form";
+import { initialState } from '../forms/csr-forms';
 
 // Mock action function - replace with your actual server action
 export async function uploadPictureAction(
@@ -58,5 +57,10 @@ export async function uploadPictureAction(
 
   revalidatePath("/gallery");
 
-  redirect("/gallery");
+  return {
+    ...initialState,
+    success: true,
+    message: "File uploaded successfully!",
+    data: { fileName: file.name, description },
+  };
 }

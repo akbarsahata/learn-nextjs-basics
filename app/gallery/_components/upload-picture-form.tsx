@@ -31,6 +31,7 @@ export default function UploadPictureForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showError, setShowError] = useState(true);
+  const [showMessage, setShowMessage] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -81,10 +82,22 @@ export default function UploadPictureForm() {
     if (formState?.error) {
       setShowError(true);
     }
+    if (formState?.success) {
+      setShowMessage(true);
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   }, [formState]);
 
   const dismissError = () => {
     setShowError(false);
+  };
+
+  const dismissMessage = () => {
+    setShowMessage(false);
   };
 
   return (
@@ -177,9 +190,14 @@ export default function UploadPictureForm() {
           </div>
         )}
 
-        {formState?.success && (
-          <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
-            {formState.message}
+        {formState?.success && showMessage && (
+          <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md flex items-center justify-between">
+            <span>{formState.message}</span>
+            <XIcon
+              className="inline ml-2 cursor-pointer hover:green-100 hover:rounded-full p-1 transition-colors"
+              size={20}
+              onClick={dismissMessage}
+            />
           </div>
         )}
       </div>
