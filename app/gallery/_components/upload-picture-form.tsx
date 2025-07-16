@@ -92,6 +92,12 @@ export default function UploadPictureForm() {
     }
   }, [formState]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 3000);
+  }, [showMessage]);
+
   const dismissError = () => {
     setShowError(false);
   };

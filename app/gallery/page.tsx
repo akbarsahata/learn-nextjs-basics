@@ -3,6 +3,7 @@ import { galleriesRepository } from "@/lib/data/repositories";
 import { match } from "ts-pattern";
 import GalleryItem from "./_components/gallery-item";
 import UploadPictureForm from "./_components/upload-picture-form";
+import { Toaster } from '@/components/ui/sonner';
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,7 @@ export default async function Page() {
             />
           ))
         )}
+      <Toaster position="bottom-right" richColors />
     </div>
   );
 }

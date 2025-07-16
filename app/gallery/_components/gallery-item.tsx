@@ -11,7 +11,9 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { Trash2Icon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Suspense, useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { deletePictureAction } from "../actions";
 
 // Placeholder component for loading/fallback
@@ -56,7 +58,7 @@ export default function GalleryItem(props: GalleryItemProps) {
           onClick={() => setOpenImageDialog(true)}
           className="w-full h-80 bg-gray-200 rounded-sm flex items-center justify-center overflow-hidden hover:opacity-85 transition-opacity duration-300 hover:cursor-pointer"
         >
-            <Suspense fallback={<LoadingOrFallback />}>
+          <Suspense fallback={<LoadingOrFallback />}>
             <Image
               src={pictureUrl}
               alt={description}
@@ -65,7 +67,7 @@ export default function GalleryItem(props: GalleryItemProps) {
               className="object-contain w-full h-80 rounded-sm"
               loading="lazy"
             />
-            </Suspense>
+          </Suspense>
         </div>
 
         <div className="flex items-center justify-items-end">
@@ -142,7 +144,16 @@ export function ImageDeleteDialog(props: ImageDeleteDialogProps) {
     }
   );
 
+  const router = useRouter();
+
   const { open, onClose } = props;
+
+  useEffect(() => {
+    if (nextState?.success) {
+      toast.success("Picture deleted successfully!");
+      router.push("/gallery", { scroll: false });
+    }
+  }, [nextState, router]);
 
   useEffect(() => {
     if (nextState?.success) {
@@ -158,8 +169,8 @@ export function ImageDeleteDialog(props: ImageDeleteDialogProps) {
             <DialogTitle>Are you absolutely sure?</DialogTitle>
             <DialogDescription>
               <span>
-
-              This action cannot be undone. This will permanently delete the picture from the gallery.
+                This action cannot be undone. This will permanently delete the
+                picture from the gallery.
               </span>
               <Image
                 src={props.pictureUrl}
@@ -183,13 +194,12 @@ export function ImageDeleteDialog(props: ImageDeleteDialogProps) {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-70 transition-colors"
                 disabled={isPending}
               >
                 {isPending ? "Deleting..." : "Delete"}
               </button>
             </div>
-
             {nextState?.success && (
               <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
                 {nextState.message || "Picture deleted successfully!"}

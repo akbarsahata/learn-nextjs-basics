@@ -88,7 +88,7 @@ export async function deletePictureAction(
 
   await galleriesRepository.delete(db, galleryItem.id);
 
-  revalidatePath("/gallery");
+  // revalidatePath("/gallery");
 
   return { success: true, message: "File deleted successfully!" };
 }
