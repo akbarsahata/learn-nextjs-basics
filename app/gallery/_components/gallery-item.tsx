@@ -50,8 +50,8 @@ export default function GalleryItem(props: GalleryItemProps) {
             <Image
               src={pictureUrl}
               alt={description}
-              width={320}
               height={320}
+              width={320}
               className="object-cover w-full h-80 rounded-sm"
               loading="lazy"
             />

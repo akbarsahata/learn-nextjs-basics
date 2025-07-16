@@ -28,7 +28,9 @@ export const eventsRepository = {
 
 export const galleriesRepository = {
   async getAll(db: Db) {
-    return db.query.galleriesTable.findMany();
+    return db.query.galleriesTable.findMany({
+      orderBy: (galleries, { desc }) => desc(galleries.updatedAt),
+    })
   },
   async getById(db: Db, id: string) {
     return db.query.galleriesTable.findFirst({
