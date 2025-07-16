@@ -37,6 +37,11 @@ export const galleriesRepository = {
       where: (galleries, { eq }) => eq(galleries.id, id),
     });
   },
+  async getByImageUrl(db: Db, imageUrl: string) {
+    return db.query.galleriesTable.findFirst({
+      where: (galleries, { eq }) => eq(galleries.imageUrl, imageUrl),
+    });
+  },
   async create(db: Db, data: GalleryInsert) {
     return db.insert(galleriesTable).values(data).returning();
   },

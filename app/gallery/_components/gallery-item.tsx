@@ -4,13 +4,15 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
-import { EllipsisVertical } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import { Suspense, useActionState, useEffect, useState } from "react";
+import { deletePictureAction } from "../actions";
 
 // Placeholder component for loading/fallback
 function LoadingOrFallback() {
@@ -73,7 +75,7 @@ export default function GalleryItem(props: GalleryItemProps) {
             </h3>
             <p>{format(updatedDate, "EEEE, d MMMM yyyy")}</p>
           </div>
-          <EllipsisVertical
+          <Trash2Icon
             className="ml-auto text-gray-500 hover:text-gray-700 cursor-pointer"
             size={20}
             onClick={() => setOpenDeleteDialog(true)}
@@ -81,7 +83,7 @@ export default function GalleryItem(props: GalleryItemProps) {
           <ImageDeleteDialog
             open={openDeleteDialog}
             onClose={() => setOpenDeleteDialog(false)}
-            filePath={pictureUrl}
+            pictureUrl={pictureUrl}
           />
         </div>
       </div>
@@ -128,22 +130,64 @@ export function ImageDialog(props: ImageDialogProps) {
 interface ImageDeleteDialogProps {
   open: boolean;
   onClose: () => void;
-  filePath: string;
+  pictureUrl: string;
 }
 
 export function ImageDeleteDialog(props: ImageDeleteDialogProps) {
+  const [nextState, deleteAction, isPending] = useActionState(
+    deletePictureAction,
+    {
+      success: false,
+      message: "",
+    }
+  );
+
   const { open, onClose } = props;
+
+  useEffect(() => {
+    if (nextState?.success) {
+      onClose();
+    }
+  }, [nextState, onClose]);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription>
-        </DialogHeader>
+        <form action={deleteAction}>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete the
+              picture from the gallery.
+            </DialogDescription>
+          </DialogHeader>
+          <input type="hidden" name="pictureUrl" value={props.pictureUrl} />
+          <DialogFooter>
+            <div className="flex items-center justify-end space-x-2">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                onClick={onClose}
+                disabled={isPending}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                disabled={isPending}
+              >
+                {isPending ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+
+            {nextState?.success && (
+              <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
+                {nextState.message || "Picture deleted successfully!"}
+              </div>
+            )}
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
