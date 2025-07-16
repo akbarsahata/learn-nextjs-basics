@@ -56,16 +56,16 @@ export default function GalleryItem(props: GalleryItemProps) {
           onClick={() => setOpenImageDialog(true)}
           className="w-full h-80 bg-gray-200 rounded-sm flex items-center justify-center overflow-hidden hover:opacity-85 transition-opacity duration-300 hover:cursor-pointer"
         >
-          <Suspense fallback={<LoadingOrFallback />}>
+            <Suspense fallback={<LoadingOrFallback />}>
             <Image
               src={pictureUrl}
               alt={description}
               height={320}
               width={320}
-              className="object-cover w-full h-80 rounded-sm"
+              className="object-contain w-full h-80 rounded-sm"
               loading="lazy"
             />
-          </Suspense>
+            </Suspense>
         </div>
 
         <div className="flex items-center justify-items-end">
@@ -157,8 +157,17 @@ export function ImageDeleteDialog(props: ImageDeleteDialogProps) {
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete the
-              picture from the gallery.
+              <span>
+
+              This action cannot be undone. This will permanently delete the picture from the gallery.
+              </span>
+              <Image
+                src={props.pictureUrl}
+                alt="Picture to be deleted"
+                height={200}
+                width={200}
+                className="mt-2 rounded-md"
+              />
             </DialogDescription>
           </DialogHeader>
           <input type="hidden" name="pictureUrl" value={props.pictureUrl} />
