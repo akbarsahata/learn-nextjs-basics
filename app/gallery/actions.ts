@@ -75,11 +75,13 @@ export async function deletePictureAction(
     return { success: false, message: "Picture URL is required." };
   }
 
+  const [folder, fileName] = pictureUrl.split("/").slice(-2);
+
   console.log("Deleting picture with URL:", pictureUrl);
 
   const { error } = await supabase.storage
     .from("learn-nextjs-basics")
-    .remove([pictureUrl]);
+    .remove([`${folder}/${fileName}`]);
 
   if (error) {
     console.error("Error deleting file:", error.message);
