@@ -1,8 +1,14 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+} from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
+import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useState } from "react";
 
@@ -38,12 +44,14 @@ interface GalleryItemProps {
 export default function GalleryItem(props: GalleryItemProps) {
   const { pictureUrl, description, updatedDate } = props;
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openImageDialog, setOpenImageDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
   return (
     <div className="border-2 border-gray-300 rounded-lg">
       <div className="p-4 space-y-3">
         <div
-          onClick={() => setOpenDialog(true)}
+          onClick={() => setOpenImageDialog(true)}
           className="w-full h-80 bg-gray-200 rounded-sm flex items-center justify-center overflow-hidden hover:opacity-85 transition-opacity duration-300 hover:cursor-pointer"
         >
           <Suspense fallback={<LoadingOrFallback />}>
@@ -58,14 +66,28 @@ export default function GalleryItem(props: GalleryItemProps) {
           </Suspense>
         </div>
 
-        <div className="space-y-1">
-          <h3 className="text-gray-700 font-medium text-base">{description}</h3>
-          <p>{format(updatedDate, "EEEE, d MMMM yyyy")}</p>
+        <div className="flex items-center justify-items-end">
+          <div className="space-y-1">
+            <h3 className="text-gray-700 font-medium text-base">
+              {description}
+            </h3>
+            <p>{format(updatedDate, "EEEE, d MMMM yyyy")}</p>
+          </div>
+          <EllipsisVertical
+            className="ml-auto text-gray-500 hover:text-gray-700 cursor-pointer"
+            size={20}
+            onClick={() => setOpenDeleteDialog(true)}
+          />
+          <ImageDeleteDialog
+            open={openDeleteDialog}
+            onClose={() => setOpenDeleteDialog(false)}
+            filePath={pictureUrl}
+          />
         </div>
       </div>
-      <DialogDemo
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
+      <ImageDialog
+        open={openImageDialog}
+        onClose={() => setOpenImageDialog(false)}
         pictureUrl={pictureUrl}
         description={description}
       />
@@ -73,34 +95,56 @@ export default function GalleryItem(props: GalleryItemProps) {
   );
 }
 
-interface DialogDemoProps {
+interface ImageDialogProps {
   open: boolean;
   onClose: () => void;
   pictureUrl: string;
   description: string;
 }
 
-export function DialogDemo(props: DialogDemoProps) {
+export function ImageDialog(props: ImageDialogProps) {
   const { open, onClose, pictureUrl, description } = props;
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <form>
-        <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">
-          <DialogHeader>
-            <DialogTitle>{description}</DialogTitle>
-          </DialogHeader>
-          <Suspense fallback={<LoadingOrFallback />}>
-            <Image
-              src={pictureUrl}
-              alt={description}
-              height={800}
-              width={800}
-              unoptimized
-              loading="lazy"
-            />
-          </Suspense>
-        </DialogContent>
-      </form>
+      <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{description}</DialogTitle>
+        </DialogHeader>
+        <Suspense fallback={<LoadingOrFallback />}>
+          <Image
+            src={pictureUrl}
+            alt={description}
+            height={800}
+            width={800}
+            unoptimized
+            loading="lazy"
+          />
+        </Suspense>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+interface ImageDeleteDialogProps {
+  open: boolean;
+  onClose: () => void;
+  filePath: string;
+}
+
+export function ImageDeleteDialog(props: ImageDeleteDialogProps) {
+  const { open, onClose } = props;
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
     </Dialog>
   );
 }
