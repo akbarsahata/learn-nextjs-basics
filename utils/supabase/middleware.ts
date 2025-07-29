@@ -36,7 +36,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Protect specific routes that require authentication
-  const protectedRoutes = ['/private']
+  const protectedRoutes = ['/private', '/mfa']
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   )
@@ -51,6 +51,30 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
+  }
+
+  // Check if user needs MFA challenge (only for users who have MFA enabled)
+  if (user && isProtectedRoute && !request.nextUrl.pathname.startsWith('/mfa/challenge')) {
+    try {
+      // Get user's assurance level
+      const { data: assuranceData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+      
+      // Get user's factors to check if they have MFA enabled
+      const { data: factorsData } = await supabase.auth.mfa.listFactors()
+      const hasMFAEnabled = [...(factorsData?.totp || []), ...(factorsData?.phone || [])].some(
+        factor => factor.status === 'verified'
+      )
+
+      // Only redirect to MFA challenge if user has MFA enabled and needs to verify
+      if (hasMFAEnabled && assuranceData?.nextLevel === 'aal2' && assuranceData?.currentLevel === 'aal1') {
+        const url = request.nextUrl.clone()
+        url.pathname = '/mfa/challenge'
+        return NextResponse.redirect(url)
+      }
+    } catch (error) {
+      // If there's an error checking MFA status, continue normally
+      console.error('Error checking MFA status in middleware:', error)
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

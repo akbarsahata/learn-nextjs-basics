@@ -43,6 +43,13 @@ export default function Home() {
         >
           Private Page (Protected)
         </Link>
+        <Separator />
+        <Link
+          href="/mfa"
+          className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-purple-50 hover:bg-purple-100 transition"
+        >
+          Two-Factor Authentication (2FA)
+        </Link>
       </div>
     </div>
   );
