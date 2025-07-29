@@ -29,6 +29,20 @@ export default function Home() {
         >
           Gallery
         </Link>
+        <Separator />
+        <Link
+          href="/login"
+          className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-blue-50 hover:bg-blue-100 transition"
+        >
+          Authentication (Login)
+        </Link>
+        <Separator />
+        <Link
+          href="/private"
+          className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-green-50 hover:bg-green-100 transition"
+        >
+          Private Page (Protected)
+        </Link>
       </div>
     </div>
   );
