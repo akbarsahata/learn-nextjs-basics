@@ -9,6 +9,7 @@ export async function enrollMFA() {
 
   try {
     const { data, error } = await supabase.auth.mfa.enroll({
+      friendlyName: crypto.randomUUID(),
       factorType: "totp",
     });
 

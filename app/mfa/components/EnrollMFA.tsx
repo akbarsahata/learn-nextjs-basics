@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { enrollMFA, verifyMFAEnrollment } from '../actions'
-import { createDataUrl } from '@/utils/mfa/helpers'
 
 interface EnrollMFAProps {
   onEnrolled: () => void
@@ -28,7 +27,8 @@ export function EnrollMFA({ onEnrolled, onCancelled }: EnrollMFAProps) {
       
       if (result.success) {
         setFactorId(result.factorId!)
-        setQrCode(createDataUrl(result.qrCode!))
+        console.log('MFA factor enrolled:', result.qrCode)
+        setQrCode(result.qrCode!)
         setSecret(result.secret!)
       } else {
         setError(result.error || 'Failed to start MFA enrollment')
