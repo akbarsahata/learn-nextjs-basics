@@ -37,13 +37,17 @@ export async function updateSession(request: NextRequest) {
 
   // Protect specific routes that require authentication
   const protectedRoutes = ['/private', '/mfa']
+  const anonymousAllowedRoutes = ['/anonymous-demo']
   const isProtectedRoute = protectedRoutes.some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  )
+  const isAnonymousAllowedRoute = anonymousAllowedRoutes.some(route =>
     request.nextUrl.pathname.startsWith(route)
   )
 
   if (
     !user &&
-    isProtectedRoute &&
+    (isProtectedRoute || isAnonymousAllowedRoute) &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/auth')
   ) {

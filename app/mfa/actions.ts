@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 
 export async function enrollMFA() {
@@ -123,9 +124,11 @@ export async function challengeMFA(factorId: string, code: string) {
     // Redirect to protected page after successful MFA
     redirect("/private");
   } catch (error) {
-    console.error("MFA challenge error:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Failed to verify MFA code"
-    );
+    if (!isRedirectError(error)) {
+      console.error("MFA challenge error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Failed to verify MFA code"
+      );
+    }
   }
 }

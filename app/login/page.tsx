@@ -1,4 +1,4 @@
-import { login, signup } from './actions'
+import { login, signInAnonymously, signup } from "./actions";
 
 export default function LoginPage() {
   return (
@@ -12,7 +12,10 @@ export default function LoginPage() {
         <form className="mt-8 space-y-6">
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -26,7 +29,10 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -55,8 +61,35 @@ export default function LoginPage() {
               Sign up
             </button>
           </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-gray-50 text-gray-500">Or</span>
+            </div>
+          </div>
         </form>
+        <div>
+          <form action={signInAnonymously}>
+            <button
+              type="submit"
+              className="group relative flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              🕶️ Continue Anonymously
+            </button>
+          </form>
+        </div>
+
+        <div className="text-center">
+          <p className="text-xs text-gray-500">
+            Anonymous access lets you try the app without creating an account.
+            <br />
+            You can upgrade to a permanent account later.
+          </p>
+        </div>
       </div>
     </div>
-  )
+  );
 }

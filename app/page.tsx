@@ -50,6 +50,13 @@ export default function Home() {
         >
           Two-Factor Authentication (2FA)
         </Link>
+        <Separator />
+        <Link
+          href="/anonymous-demo"
+          className="py-3 rounded-lg border border-gray-200 text-center no-underline text-gray-800 bg-orange-50 hover:bg-orange-100 transition"
+        >
+          🕶️ Anonymous Demo
+        </Link>
       </div>
     </div>
   );

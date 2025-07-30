@@ -21,13 +21,28 @@ export default async function PrivatePage() {
     ...(factorsData?.phone || []),
   ].some((factor) => factor.status === "verified");
 
+  // Check if user migrated from anonymous
+  const wasMigrated = data.user.user_metadata?.migration?.fromAnonymous;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="text-center max-w-md">
+        {wasMigrated && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <h2 className="text-green-800 font-semibold mb-2">🎉 Migration Successful!</h2>
+            <p className="text-green-700 text-sm">
+              Your anonymous data has been successfully merged with your permanent account.
+              Your cart items and notes are now safely saved!
+            </p>
+          </div>
+        )}
+        
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Welcome to your private page!
         </h1>
-        <p className="text-lg text-gray-600 mb-8">Hello {data.user.email}</p>
+        <p className="text-lg text-gray-600 mb-8">
+          Hello {data.user.email || (data.user.is_anonymous ? 'Anonymous User' : 'User')}
+        </p>
 
         <div className="space-y-4 mb-8">
           <div className="bg-white rounded-lg p-4 shadow">
